@@ -1112,4 +1112,21 @@ function Modules:HaveItem(u : string)
 	end
 end
 
+task.defer(function()
+	if hookfunction and not islclosure(hookfunction) then
+		hookfunction(require(ReplicatedStorage.Effect.Container.Death), function()
+			return
+		end)
+		hookfunction(require(ReplicatedStorage.Effect.Container.Respawn), function()
+			return
+		end)
+		hookfunction(require(ReplicatedStorage.Effect.Container.RaceAwakenings.CyborgDrone), function()
+			return
+		end)
+		hookfunction(require(ReplicatedStorage.GuideModule.ChangeDisplayedNPC), function()
+			return
+		end)
+	end
+end)
+
 return Modules
