@@ -3,7 +3,8 @@ local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
 
 return function(low: boolean)
-	if low then
+	local lowz = low or false
+	if lowz then
 		local maxplayers = math.huge
 		local goodserver
 		local gamelink = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"
