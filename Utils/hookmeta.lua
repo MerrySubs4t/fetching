@@ -1,3 +1,5 @@
+local Executor = string.upper(identifyexecutor())
+local Blacklist_Executor = table.find({"SOLARA", "XENO"}, Executor)
 local hookmetamethod = (not Blacklist_Executor and hookmetamethod) or (function(...) return ... end)
 local hookfunction = (not Blacklist_Executor and hookfunction) or (function(...) return ... end)
 local islclosure = (not Blacklist_Executor and islclosure) or (function(...) return ... end)
