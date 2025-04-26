@@ -17,11 +17,13 @@ task.defer(function()
 	end
 
 	if getsenv then
-		local Success, ScriptEnv = pcall(getsenv, LocalScript)
+		pcall(function()
+			local Success, ScriptEnv = pcall(getsenv, LocalScript)
 
-		if Success and ScriptEnv then
-			HIT_FUNCTION = ScriptEnv._G.SendHitsToServer
-		end
+			if Success and ScriptEnv then
+				HIT_FUNCTION = ScriptEnv._G.SendHitsToServer
+			end
+		end)
 	end
 end)
 
