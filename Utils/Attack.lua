@@ -6,24 +6,23 @@ local Net = ReplicatedStorage:WaitForChild("Modules"):WaitForChild("Net")
 local RegisterHit = Net:WaitForChild("RE/RegisterHit")
 local RegisterAttack = Net:WaitForChild("RE/RegisterAttack")
 
-local PlayerScripts = game.Players.LocalPlayer:WaitForChild("PlayerScripts")
-local LocalScript = PlayerScripts:FindFirstChildOfClass("LocalScript")
+local HIT_FUNCTION
 
 task.defer(function()
-	pcall(function()
-		while not LocalScript do
-			game.Players.LocalPlayer.PlayerScripts.ChildAdded:Wait()
-			LocalScript = PlayerScripts:FindFirstChildOfClass("LocalScript")
-		end
+	local PlayerScripts = LocalPlayer:WaitForChild("PlayerScripts")
+	local LocalScript = PlayerScripts:FindFirstChildOfClass("LocalScript")
+	while not LocalScript do
+		LocalPlayer.PlayerScripts.ChildAdded:Wait()
+		LocalScript = PlayerScripts:FindFirstChildOfClass("LocalScript")
+	end
 
-		if getsenv then
-			local Success, ScriptEnv = pcall(getsenv, LocalScript)
+	if getsenv then
+		local Success, ScriptEnv = pcall(getsenv, LocalScript)
 
-			if Success and ScriptEnv then
-				HIT_FUNCTION = ScriptEnv._G.SendHitsToServer
-			end
+		if Success and ScriptEnv then
+			HIT_FUNCTION = ScriptEnv._G.SendHitsToServer
 		end
-	end)
+	end
 end)
 
 return function()
