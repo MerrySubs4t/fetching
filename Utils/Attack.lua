@@ -32,7 +32,7 @@ return function()
 		for _, enemy in ipairs(Enemies) do
 			local hum = enemy:FindFirstChild("Humanoid")
 			local root = enemy:FindFirstChild("HumanoidRootPart")
-			if hum and root and hum.Health > 0 and (root.Position - Character.HumanoidRootPart.Position).Magnitude <= 60 then
+			if hum and root and hum.Health > 0 and (root.Position - Character.HumanoidRootPart.Position).Magnitude <= tonumber(100)  then
 				local targets = {}
 				for _, e in ipairs(Enemies) do
 					local eh = e:FindFirstChild("Humanoid")
