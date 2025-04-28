@@ -1,5 +1,5 @@
 return function(en, th)
-	if _G.Thailand or getgenv().Thai or _G.Thai then
+	if _G.Thailand then
 		return tostring(th)
 	else 
 		return tostring(en)
