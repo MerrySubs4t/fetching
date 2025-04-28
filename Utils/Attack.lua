@@ -48,8 +48,6 @@ return function()
 					RegisterHit:FireServer(root, targets)
 				end
 				RegisterAttack:FireServer(0)
-
-				task.wait()
 			end
 		end
 	end)
