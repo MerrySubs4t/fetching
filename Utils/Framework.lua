@@ -2251,7 +2251,7 @@ function Fetching:Window(info)
 				Label.BorderColor3 = Color3.fromRGB(0,0,0)
 				Label.BorderSizePixel = 0
 				Label.LayoutOrder = 2
-				Label.Size = UDim2.new(1, 0,0, 25)
+				Label.Size = UDim2.new(1, 0,0, 15)
 
 				LabelFrame_1.Name = "LabelFrame"
 				LabelFrame_1.Parent = Label
@@ -2278,7 +2278,7 @@ function Fetching:Window(info)
 				Title_1.RichText = true
 				Title_1.Text = tostring(Title)
 				Title_1.TextColor3 = Color3.fromRGB(204,204,204)
-				Title_1.TextSize = 9
+				Title_1.TextSize = 12
 				Title_1.TextWrapped = true
 				Title_1.TextXAlignment = GetAlignment(Side)
 				Title_1.Position = UDim2.new(0, 0,0.5, 0)
@@ -2288,7 +2288,7 @@ function Fetching:Window(info)
 
 				Title_1.Size = UDim2.new(1, 0, 0, Title_1.TextBounds.Y)
 				LabelFrame_1.Size = UDim2.new(.9, 0, 0, Title_1.TextBounds.Y + 5)
-				Label.Size = UDim2.new(1, 0, 0, Title_1.TextBounds.Y + 10)
+				Label.Size = UDim2.new(1, 0, 0, Title_1.TextBounds.Y + 5)
 
 				local NewText = {}
 
