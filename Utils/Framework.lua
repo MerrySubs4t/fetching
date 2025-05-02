@@ -2278,7 +2278,7 @@ function Fetching:Window(info)
 				Title_1.RichText = true
 				Title_1.Text = tostring(Title)
 				Title_1.TextColor3 = Color3.fromRGB(204,204,204)
-				Title_1.TextSize = 12
+				Title_1.TextSize = 15
 				Title_1.TextWrapped = true
 				Title_1.TextXAlignment = GetAlignment(Side)
 				Title_1.Position = UDim2.new(0, 0,0.5, 0)
