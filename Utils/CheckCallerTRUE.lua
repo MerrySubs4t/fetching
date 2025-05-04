@@ -76,9 +76,9 @@ return function()
 				[4] = CFrame.new(-1140, 4, 3837),
 			}
 		elseif Level >= 40 and Level <= 59 then
-			if VerifyEnemie("Bobby") and Level >= 55 then
+			if VerifyEnemie("Chef") and Level >= 55 then
 				return {
-					[1] = "Bobby",
+					[1] = "Chef",
 					[2] = "BuggyQuest1",
 					[3] = 3,
 					[4] = CFrame.new(-1140, 4, 3827),
@@ -375,9 +375,9 @@ return function()
 				[4] = CFrame.new(-2440, 73, -3217),
 			}
 		elseif (Level >= 900) and (Level <= 949) then
-			if VerifyEnemie("Fajita") and (Level > 924) then
+			if VerifyEnemie("Ortibus") and (Level > 924) then
 				return {
-					[1] = "Fajita",
+					[1] = "Ortibus",
 					[2] = "MarineQuest3",
 					[3] = 3,
 					[4] = CFrame.new(-2440, 73, -3217),
