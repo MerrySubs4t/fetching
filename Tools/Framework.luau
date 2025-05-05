@@ -3940,7 +3940,6 @@ function Library:Window(p)
 		end
 
 		function Func:Image(p)
-			local Image = p.Image
 
 			local ImageLogo = Instance.new("ImageLabel")
 			local UICorner_1 = Instance.new("UICorner")
@@ -3951,7 +3950,7 @@ function Library:Window(p)
 			ImageLogo.Position = UDim2.new(0.5,0,0.5,0)
 			ImageLogo.BackgroundTransparency = 1
 			ImageLogo.Size = UDim2.new(1,0,180,0)
-			ImageLogo.Image = gl(Image)
+			ImageLogo.Image = gl(p)
 			ImageLogo.ScaleType = Enum.ScaleType.Crop
 
 			UICorner_1.Parent = ImageLogo
