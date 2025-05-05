@@ -3939,6 +3939,33 @@ function Library:Window(p)
 			return New
 		end
 
+		function Func:Image(p)
+			local Image = p.Image
+
+			local ImageLogo = Instance.new("ImageLabel")
+			local UICorner_1 = Instance.new("UICorner")
+
+			ImageLogo.Name = "Im"
+			ImageLogo.Parent = ScrollingFrame_1
+			ImageLogo.AnchorPoint = Vector2.new(0.5,0.5)
+			ImageLogo.Position = UDim2.new(0.5,0,0.5,0)
+			ImageLogo.BackgroundTransparency = 1
+			ImageLogo.Size = UDim2.new(1,0,180,0)
+			ImageLogo.Image = gl(Image)
+			ImageLogo.ScaleType = Enum.ScaleType.Crop
+
+			UICorner_1.Parent = ImageLogo
+			UICorner_1.CornerRadius = UDim.new(0,3)
+
+			local NewValue = {}
+
+			function NewValue:SetImage(b)
+				ImageLogo.Image = gl(b)
+			end
+
+			return NewValue
+		end
+
 		return Func
 	end
 
