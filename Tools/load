@@ -1,6 +1,14 @@
+
+--[[
+	2025 C:Fetching Tools by @96soul
+	2025 C:User Interface by @Dummyrme
+]]--
+
+
 --IGNORE THIS
 getgenv, identifyexecutor, setclipboard, makefolder, isfolder, getthreadidentity = getgenv, identifyexecutor, setclipboard, makefolder, isfolder, getthreadidentity
 writefile, isfile, readfile, delfile, sethiddenproperty, getnilinstances = writefile, isfile, readfile, delfile, sethiddenproperty, getnilinstances
+getgc, getscriptbytecode, request = getgc, getscriptbytecode, request
 ----------------------------------------------------
 
 -- Wait for Utils
@@ -43,7 +51,7 @@ local PlayerId: MyId = LocalPlayer.UserId;
 local Team: MyTeam = tostring(LocalPlayer.Team);
 
 -- Config path
-local Folder: SaveFolder = "Fetching'Script/Config/" .. PlayerId .. "/" .. PlaceId .. ".json";
+local Folder: SaveFolder = "Fetching'Script/Config/" .. PlayerId .. ".json";
 
 -- Character
 local Character: MyBody = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait();
@@ -74,6 +82,7 @@ else
 	Env_.Emulator = "Emulator"
 end
 
+if Env_.Fecthing then return warn("รันซ้ำหาพ่อมึง") end;Env_.Fetching = true
 
 -- Config
 Env_.Configs = {};
@@ -89,15 +98,8 @@ Save = function(key, value)
 end;
 
 Load = function()
-	local baseFolder = "Fetching'Script";
-	local configFolder = baseFolder .. "/Config";
-	local playerFolder = configFolder .. "/" .. PlayerId;
-	local filePath = playerFolder .. "/" .. PlaceId .. ".json";
-	if not isfolder(baseFolder) then makefolder(baseFolder); end;
-	if not isfolder(configFolder) then makefolder(configFolder); end;
-	if not isfolder(playerFolder) then makefolder(playerFolder); end;
-	if not isfile(filePath) then Save(); end;
-	return HttpService:JSONDecode(readfile(filePath));
+	if not isfile(Folder) then Save(); end;
+	return HttpService:JSONDecode(readfile(Folder));
 end;
 
 Default = function(v, a)
@@ -121,11 +123,21 @@ DeleteSettings = function()
 end;
 
 -- Loop utility
-Loop = function(callback)
+Loop = function(callback: func)
 	while task.wait() do
 		callback();
 	end;
 end;
+
+safeGetInstance = function(pathStr: string): Instance?
+	local success, result = pcall(function()
+		return loadstring("return " .. pathStr)()
+	end)
+	if success and typeof(result) == "Instance" then
+		return result
+	end
+	return nil
+end
 
 C = function() return Env_.Configs;end;
 
@@ -137,19 +149,38 @@ local Window : Window = Library:Window({Title = "Fetching's Tools - @96soul",Des
 local Execz : Script = Exec:Executor(true, "print('Hello, 96soul')")
 Window:SelectTab(1)
 Execz:SetVisible(false)
---Tabs
 
-local Infromations = Window:Tab({Title = 'Infromations', Icon = 107927309418429}) do
+--Tabs
+local Infromations = Window:Tab({Title = 'Informations', Icon = 107927309418429}) do
+	Infromations:Section({Title = 'Informarions'})
 	Infromations:Code({Title = "Type",Code = 
-	"Device : " .. Env_.Emulator .. "\n"
-	.. "Name : " .. User .. "(" .. DisplayName .. ")" .. "\n"
-	.. "ID : " .. PlayerId .. "\n"
-	.. "Account Age : " .. tostring(LocalPlayer.AccountAge) .. " Days" .. "\n"
-	.. "Executor : " .. identifyexecutor() .. " - " .. tostring(getthreadidentity())
+		"Device : " .. Env_.Emulator .. "\n"
+		.. "Name : " .. User .. "(" .. DisplayName .. ")" .. "\n"
+		.. "Player ID : " .. PlayerId .. "\n"
+		.. "Client Id : " .. tostring(game:GetService("RbxAnalyticsService"):GetClientId()) .. "\n"
+		.. "Account Age : " .. tostring(LocalPlayer.AccountAge) .. " Days" .. "\n"
+		.. "Executor : " .. identifyexecutor() .. " - " .. tostring(getthreadidentity())
 	})
+	Infromations:Code({Title = "Server",Code = 
+		"PlaceId : " .. PlaceId .. "\n"
+		.. "JobId : " .. JobId .. "\n"
+		.. "Max Players : " .. Players.MaxPlayers
+	})
+	Infromations:Button({Title = 'Clipboard PlaceId',Callback = function()
+		pcall(setclipboard, tostring(PlaceId))
+		Window:Notify({Title = "PlaceId",Desc = "Succes:  clip to board",Time = 3})
+	end})
+	Infromations:Button({Title = 'Clipboard JobId',Callback = function()
+		pcall(setclipboard, tostring(JobId))
+		Window:Notify({Title = "JobId",Desc = "Succes:  clip to board",Time = 3})
+	end})
+	Infromations:Section({Title = 'Misc'})
 	Infromations:Button({Title = 'Discord', Desc = "Join Discord Community",Callback = function()
 		pcall(setclipboard,"https://discord.gg/uy6TP4ew7d")
 		Window:Notify({Title = "Discord",Desc = "Succes:  clip to board",Time = 3})
+	end})
+	Infromations:Button({Title = 'Remove Configs',Desc = "Reset Configs and Use Factory Value.",Callback = function()
+		pcall(DeleteSettings)
 	end})
 end
 
@@ -394,12 +425,9 @@ Window:Line()
 
 task.spawn(function()
 	if not Blacklist_Executor then
-		
 		-- Credit to Cutie[Ayayoyaoyaoyaoayaoayoayoayaoyaaa]
-		
 		assert(getscriptbytecode, "Exploit not supported.")
 		local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-		-- encoding
 		local function enc(data)
 			return ((data:gsub('.', function(x) 
 				local r,b='',x:byte()
@@ -414,12 +442,12 @@ task.spawn(function()
 		end
 
 		local API: string = "https://api.realaya.xyz/v1"
-
 		local last_call = 0
+
 		local function call(ayaType: string, scriptPath: Script | ModuleScript | LocalScript): string
 			local success: boolean, bytecode: string = pcall(getscriptbytecode, scriptPath)
 
-			if (not success) then
+			if not success then
 				return `-- Failed to get script bytecode, error:\n\n--[[\n{bytecode}\n--]]`
 			end
 
@@ -427,6 +455,7 @@ task.spawn(function()
 			if time_elapsed <= .5 then
 				task.wait(.5 - time_elapsed)
 			end
+
 			local httpResult = request({
 				Url = API .. ayaType,
 				Body = enc(bytecode),
@@ -437,8 +466,8 @@ task.spawn(function()
 			})
 			last_call = os.clock()
 
-			if (httpResult.StatusCode ~= 200) then
-				return `-- Error occured while requesting the API, error:\n\n--[[\n{httpResult.Body}\n--]]`
+			if httpResult.StatusCode ~= 200 then
+				return `-- Error occurred while requesting the API, error:\n\n--[[\n{httpResult.Body}\n--]]`
 			else
 				return httpResult.Body
 			end
@@ -447,44 +476,91 @@ task.spawn(function()
 		local function decompile(scriptPath: Script | ModuleScript | LocalScript): string
 			return call("/decompile", scriptPath)
 		end
-		
+
 		task.spawn(function()
-			local _LocalScript = Window:Tab({Title = 'Local Script', Icon = "tag"}) do
+			local _LocalScript = Window:Tab({Title = 'Decompiler', Icon = "lock-open"}) do
 				_LocalScript:Section({Title = 'Decompiler'})
-				local allLocalScript = {}
-				for _, v in pairs(game:GetDescendants()) do
-					if v:IsA("LocalScript") then
-						table.insert(allLocalScript, v)
-					end
-				end
-				Default('LocalScript', allLocalScript[1])
-				local lcScript = _LocalScript:Dropdown({Title = 'Select Local Script',List = allLocalScript,Value = C()['LocalScript'],Callback = function(v)
+				Default('LocalScript', "game.Players.LocalPlayer.PlayerScripts.MyScript")
+				Default('ResultDp', "404 - Forbiden")
+				_LocalScript:Textbox({Title = 'Path to Script',Desc = 'Use full path to ModuleScript or LocalScript',Placeholder = 'e.g. game.Players.LocalPlayer.PlayerScripts.MyScript',Value = C()['LocalScript'],ClearTextOnFocus = false,Callback = function(v)
 					C()['LocalScript'] = v
 					Save('LocalScript', v)
 				end})
-				_LocalScript:Button({Title = 'Refresh LocalScript',Callback = function(v)
-					lcScript:Clear()
-					for _, v in pairs(game:GetDescendants()) do
-						if v:IsA("LocalScript") then
-							lcScript:Add(v)
-						end
+				local Output
+				_LocalScript:Button({Title = 'Decompiler',Desc = "Start Decompiler Script.",Callback = function()
+					local instance = safeGetInstance(C()['LocalScript'])
+					if instance then
+						C()['ResultDp'] = decompile(instance)
+						Window:Notify({Title = "Decompiler",Desc = "Success",Time = 3})
+					else
+						C()['ResultDp'] = "404 - Forbiden"
+						Window:Notify({Title = "Decompiler",Desc = "Failed",Time = 3})
 					end
+					Output:SetCode(tostring(C()['ResultDp']))
 				end})
-				_LocalScript:Button({Title = 'Decompiler',Desc = "Start Decompiler Script.",Callback = function(v)
-					_G.DecompilerLocal = decompile(C()['LocalScript'])
-				end})
-				_LocalScript:Section({Title = 'OutPut'})
-				local Output = _LocalScript:Code({Title = "Output", Code = "nil"})
-				Loop(function()
-					Output:SetCode(tostring(_G.DecompilerLocal))
-					wait(1)
-				end)
+				_LocalScript:Section({Title = 'Output'})
+				Output = _LocalScript:Code({Title = "Output", Code = C()['ResultDp']})
 			end
 		end)
-		task.spawn(function()
-			local _ModuleScript = Window:Tab({Title = 'Module Script', Icon = "tablet"}) do
+	end
+end)
+Window:Line()
+task.spawn(function()
+	local _ColletionService = Window:Tab({Title = 'GetTags', Icon = "tag"}) do
+		_ColletionService:Section({Title = 'Collections Service'})
+		local allTags = {}
+		Default('Path GetTags', "game")
+		local AllT
+		_ColletionService:Dropdown({Title = 'Value',List = {"game", "workspace", "game.Players"},Value = C()['Path GetTags'],Callback = function(v)
+			C()['Path GetTags'] = v
+			Save('Path GetTags', v)
+		end})
+		_ColletionService:Button({Title = 'GetTags',Desc = "Get All Tags in Value.",Callback = function()
+			allTags = {}
+			local instance = safeGetInstance(C()['Path GetTags'])
+			if not instance then AllT:SetCode("Instance not found.") return end
+			for _, obj in ipairs(instance:GetDescendants()) do
+				local tags = CollectionService:GetTags(obj)
+				for _, tag in ipairs(tags) do
+					if not table.find(allTags, tag) then
+						table.insert(allTags, tag)
+					end
+				end
+			end
+			AllT:SetCode(table.concat(allTags, "\n"))
+		end})
+		_ColletionService:Section({Title = 'Output'})
+		AllT = _ColletionService:Code({Title = "Output", Code = 'Waiting for tag scan...'})
+	end
+end)
 
+task.spawn(function()
+	local _nil = Window:Tab({Title = 'Getnil', Icon = "variable"}) do
+		_nil:Section({Title = 'GetnilInstance'})
+		local allTags = {}
+		local uniqueNames = {}
+		for _, obj in ipairs(getnilinstances()) do
+			if not uniqueNames[obj.Name] then
+				uniqueNames[obj.Name] = true
+				table.insert(allTags, obj.Name)
 			end
-		end)
+		end
+		local AllT
+		_nil:Button({Title = 'GetnilInstance',Desc = "Show all unique object names from getnilinstances().",Callback = function()
+			table.clear(allTags)
+			table.clear(uniqueNames)
+			for _, obj in ipairs(getnilinstances()) do
+				if not uniqueNames[obj.Name] then
+					uniqueNames[obj.Name] = true
+					table.insert(allTags, obj.Name)
+				end
+			end
+			if AllT then
+				AllT:SetCode(table.concat(allTags, "\n"))
+			end
+		end})
+		_nil:Section({Title = 'Output'})
+		AllT = _nil:Code({Title = "Output", Code = '404 - Forbidden'})
+		AllT:SetCode(table.concat(allTags, "\n"))
 	end
 end)
