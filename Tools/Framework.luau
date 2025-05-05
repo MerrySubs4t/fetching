@@ -3948,7 +3948,7 @@ function Library:Window(p)
 			ImageLogo.Position = UDim2.new(0.5,0,0.5,0)
 			ImageLogo.BackgroundTransparency = 1
 			ImageLogo.Size = UDim2.new(1,0,180,0)
-			ImageLogo.Image = gl(111362591084511)
+			ImageLogo.Image = 'rbxassetid://111362591084511'
 			ImageLogo.ScaleType = Enum.ScaleType.Crop
 			UICorner_1.Parent = ImageLogo
 			UICorner_1.CornerRadius = UDim.new(0,3)
