@@ -159,7 +159,7 @@ local themes = {
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = not game:GetService("RunService"):IsStudio() and game:GetService("CoreGui") or game:GetService("Players").LocalPlayer.PlayerGui
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 local U, Tw = game:GetService("UserInputService"), game:GetService("TweenService")
 
@@ -1055,45 +1055,47 @@ function Library:Window(p)
 	local HasChangeTheme = p.Theme
 	local IsTheme = p.Theme
 
+	local Shadow_1 = Instance.new("ImageLabel")
 	local UIPadding_1 = Instance.new("UIPadding")
 	local Background_1 = Instance.new("CanvasGroup")
 	local UICorner_1 = Instance.new("UICorner")
 	local Page_1 = Instance.new("Frame")
 	local UIPadding_2 = Instance.new("UIPadding")
 
-	local Shadow = Instance.new("ImageLabel")
-	Shadow.Parent = Background_1
-	Shadow.Name = "DropShadow"
-	Shadow.AnchorPoint = Vector2.new(0.5, 0.5)
-	Shadow.BackgroundColor3 = Color3.fromRGB(28,28,30)
-	Shadow.BackgroundTransparency = 1
-	Shadow.BorderColor3 = Color3.fromRGB(0,0,0)
-	Shadow.BorderSizePixel = 0
-	Shadow.Position = UDim2.new(0.5, 0, 0.5, 0)
-	Shadow.Size = UDim2.new(1, 120, 1, 120)
-	Shadow.ZIndex = 0
-	Shadow.Image = "rbxassetid://8992230677"
-	Shadow.ImageColor3 = Color3.new(0, 0, 0)
-	Shadow.ImageTransparency = 0.35
-	Shadow.ResampleMode = Enum.ResamplerMode.Default
-	Shadow.ScaleType = Enum.ScaleType.Slice
-	Shadow.SliceScale = 1
-	Shadow.TileSize = UDim2.new(1, 0, 1, 0)
-	Shadow.SliceCenter = Rect.new(99, 99, 99, 99)
+	Shadow_1.Name = "Shadow"
+	Shadow_1.Parent = ScreenGui
+	Shadow_1.AnchorPoint = Vector2.new(0.5, 0.5)
+	Shadow_1.BackgroundColor3 = Color3.fromRGB(163,162,165)
+	Shadow_1.BackgroundTransparency = 1
+	Shadow_1.Position = UDim2.new(0.5, 0,0.5, 0)
+	Shadow_1.Size = Size
+	Shadow_1.Image = "rbxassetid://1316045217"
+	Shadow_1.ImageColor3 = Color3.fromRGB(24, 24, 31)
+	Shadow_1.ImageTransparency = 0.8
+	Shadow_1.ScaleType = Enum.ScaleType.Slice
+	Shadow_1.SliceCenter = Rect.new(10, 10, 118, 118)
+	Shadow_1.Visible = false
 
-	addToTheme('Shadow', Shadow)
+	addToTheme('Shadow', Shadow_1)
+
+	UIPadding_1.Parent = Shadow_1
+	UIPadding_1.PaddingBottom = UDim.new(0,8)
+	UIPadding_1.PaddingLeft = UDim.new(0,8)
+	UIPadding_1.PaddingRight = UDim.new(0,8)
+	UIPadding_1.PaddingTop = UDim.new(0,8)
 
 	Background_1.Name = "Background"
-	Background_1.Parent = ScreenGui
+	Background_1.Parent = Shadow_1
 	Background_1.AnchorPoint = Vector2.new(0.5, 0.5)
 	Background_1.BackgroundColor3 = Color3.fromRGB(29, 28, 38)
 	Background_1.BorderColor3 = Color3.fromRGB(0,0,0)
 	Background_1.BorderSizePixel = 0
 	Background_1.Position = UDim2.new(0.5, 0,0.5, 0)
-	Background_1.Size = Size
+	Background_1.Size = UDim2.new(1, 0,1, 0)
 	Background_1.ClipsDescendants = true
 	Background_1.GroupTransparency = 1
 
+	Shadow_1.Visible = true  
 	local org = Background_1.Size
 	Background_1.Size = org - UDim2.fromOffset(5, 5)
 	tw({
@@ -2733,6 +2735,7 @@ function Library:Window(p)
 
 			function New:SetCode(t)
 				TextBox_2.Text = highlighter.run(t)
+				CodeText = t
 			end
 
 			return New
