@@ -23,31 +23,46 @@ if getsenv then
 	end)
 end
 
+function GetValidTargets(source)
+	local targets = {}
+	for _, entity in ipairs(source) do
+		local humanoid = entity:FindFirstChild("Humanoid")
+		local part = entity:FindFirstChild("HumanoidRootPart") or entity:FindFirstChildOfClass("BasePart")
+		if humanoid and part and humanoid.Health > 0 then
+			table.insert(targets, {entity, part})
+		end
+	end
+	return targets
+end
+
 return function()
 	pcall(function()
 		local Character = LocalPlayer.Character
-		if not Character or not Character:FindFirstChild("HumanoidRootPart") then return end
+		if not Character then return end
 
-		local Enemies = workspace.Enemies:GetChildren()
-		for _, enemy in ipairs(Enemies) do
-			local hum = enemy:FindFirstChild("Humanoid")
-			local root = enemy:FindFirstChild("HumanoidRootPart")
-			if hum and root and hum.Health > 0 and (root.Position - Character.HumanoidRootPart.Position).Magnitude <= tonumber(100)  then
-				local targets = {}
-				for _, e in ipairs(Enemies) do
-					local eh = e:FindFirstChild("Humanoid")
-					local eroot = e:FindFirstChild("HumanoidRootPart") or e:FindFirstChildOfClass("BasePart")
-					if eh and eroot and eh.Health > 0 then
-						table.insert(targets, {e, eroot})
+		local rootPart = Character:FindFirstChild("HumanoidRootPart")
+		local toolEquipped = Character:FindFirstChildOfClass("Tool")
+		if not rootPart or not toolEquipped then return end
+		local sources = {
+			workspace.Enemies:GetChildren(),
+			workspace.Characters:GetChildren()
+		}
+		for _, source in ipairs(sources) do
+			for _, enemy in ipairs(source) do
+				local enemyHumanoid = enemy:FindFirstChild("Humanoid")
+				local enemyRoot = enemy:FindFirstChild("HumanoidRootPart")
+				if enemyHumanoid and enemyRoot and enemyHumanoid.Health > 0 then
+					local distance = (enemyRoot.Position - rootPart.Position).Magnitude
+					if distance <= 100 then
+						local targets = GetValidTargets(source)
+						if HIT_FUNCTION then
+							HIT_FUNCTION(enemyRoot, targets)
+						else
+							RegisterHit:FireServer(enemyRoot, targets)
+						end
+						RegisterAttack:FireServer(0)
 					end
 				end
-
-				if HIT_FUNCTION then
-					HIT_FUNCTION(root, targets)
-				else
-					RegisterHit:FireServer(root, targets)
-				end
-				RegisterAttack:FireServer(0)
 			end
 		end
 	end)
