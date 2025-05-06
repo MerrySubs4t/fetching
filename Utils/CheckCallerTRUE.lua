@@ -857,7 +857,7 @@ return function()
 				[3] = 1,
 				[4] = CFrame.new(-16665, 104, 1579),
 			}
-		elseif (Level >= 2575) and (Level <= 2599) and (Level >= 2600) then
+		elseif Level >= 2575 then
 			return {
 				[1] = "Skull Slayer",
 				[2] = "TikiQuest3",
