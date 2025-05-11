@@ -54,13 +54,17 @@ return function()
 				if enemyHumanoid and enemyRoot and enemyHumanoid.Health > 0 then
 					local distance = (enemyRoot.Position - rootPart.Position).Magnitude
 					if distance <= 100 then
+						RegisterAttack:FireServer(0)
+						RegisterAttack:FireServer(1)
+						RegisterAttack:FireServer(2)
+						RegisterAttack:FireServer(3)
+						RegisterAttack:FireServer(4)
 						local targets = GetValidTargets(source)
 						if HIT_FUNCTION then
 							HIT_FUNCTION(enemyRoot, targets)
 						else
 							RegisterHit:FireServer(enemyRoot, targets)
 						end
-						RegisterAttack:FireServer(0)
 					end
 				end
 			end
