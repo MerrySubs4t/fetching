@@ -838,7 +838,7 @@ return function()
 			}
 		elseif (Level >= 2500) and (Level <= 2524) then
 			return {
-				[1] = "Sun-kissed Warrior",
+				[1] = "Sun-kissed Warriors",
 				[2] = "TikiQuest2",
 				[3] = 1,
 				[4] = CFrame.new(-16541, 54, 1051),
