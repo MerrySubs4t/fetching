@@ -1,5 +1,5 @@
 local _id : number = game.PlaceId
-
+local Kuy = {}
 if _id == 2753915549 then
 	w1 = true
 elseif _id == 4442272183 then
@@ -8,7 +8,7 @@ elseif _id == 7449423635 then
 	w3 = true
 end
 
-return function()
+function Kuy:Cute()
 	pcall(function()
 		local lv = game:GetService("Players").LocalPlayer.Data.Level.Value
 		if w1 then
@@ -661,3 +661,4 @@ return function()
 		end
 	end)
 end
+return Kuy
