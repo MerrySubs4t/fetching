@@ -1,4 +1,5 @@
-_id = game.PlaceId
+local _id : number = game.PlaceId
+
 if _id == 2753915549 then
 	w1 = true
 elseif _id == 4442272183 then
@@ -6,6 +7,7 @@ elseif _id == 4442272183 then
 elseif _id == 7449423635 then
 	w3 = true
 end
+
 return function()
 	local lv = game:GetService("Players").LocalPlayer.Data.Level.Value
 	if w1 then
@@ -617,13 +619,15 @@ return function()
 				[3] = "TikiQuest3",
 				[4] = CFrame.new(-16666.5703125, 105.2913818359375, 1576.6925048828125)
 			}
-		elseif lv >= 2575 then
+		elseif lv >= 2575 and lv <= 2599 then
 			return {
 				[1] = "Skull Slayer",
 				[2] = 2,
 				[3] = "TikiQuest3",
 				[4] = CFrame.new(-16666.5703125, 105.2913818359375, 1576.6925048828125)
 			}
+		elseif lv >= 2624 then
+			
 		end
 	end
 end
