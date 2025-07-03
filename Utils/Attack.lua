@@ -55,10 +55,6 @@ return function()
 					local distance = (enemyRoot.Position - rootPart.Position).Magnitude
 					if distance <= 100 then
 						RegisterAttack:FireServer(0)
-						RegisterAttack:FireServer(1)
-						RegisterAttack:FireServer(2)
-						RegisterAttack:FireServer(3)
-						RegisterAttack:FireServer(4)
 						local targets = GetValidTargets(source)
 						if HIT_FUNCTION then
 							HIT_FUNCTION(enemyRoot, targets)
@@ -69,5 +65,6 @@ return function()
 				end
 			end
 		end
+			task.wait(0.1)
 	end)
 end
