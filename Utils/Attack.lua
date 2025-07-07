@@ -53,7 +53,7 @@ return function()
 				local enemyRoot = enemy:FindFirstChild("HumanoidRootPart")
 				if enemyHumanoid and enemyRoot and enemyHumanoid.Health > 0 then
 					local distance = (enemyRoot.Position - rootPart.Position).Magnitude
-					if distance <= 100 then
+					if distance <= 100 and isnetworkowner(rootPart) then
 						RegisterAttack:FireServer(0)
 						local targets = GetValidTargets(source)
 						if HIT_FUNCTION then
